@@ -1,5 +1,8 @@
 import 'isomorphic-fetch'
 import Link from 'next/link'
+import Layout from '../components/Layout'
+import PodcastList from '../components/PodcastList'
+import SeriesList from '../components/SeriesList'
 
 
 export default class channel extends React.Component {
@@ -31,55 +34,21 @@ export default class channel extends React.Component {
         const {channel,audioClips, series} = this.props
         return (
             <>
-                <header>
-                Podcasts
-                </header>
-                <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} >
-                    <div className="banner-content">
-                        <h1>{channel.title}</h1>  
-                    </div>  
-                 </div>
-                    
-                <h2>Series</h2>
-                <div className="channels">
-                    {
-                        series && series.map((serie) =>(
-                            <Link href={`/series?id=${serie.id}`} prefetch key={serie.id}>
-                                <a className="channel">
-                                    <img src={serie.urls.logo_image.original} alt={serie.title} />
-                                    <h2>{serie.title}</h2>
-                                </a>
-                            </Link>
-                        ))
-                    }
-                </div>
-                <h2>Ultimos Podcasts</h2>
-                <div className="channels">
-                    {
-                        audioClips.map((audio) => (
-                            <Link href={`/podcast?id=${audio.id}`} prefetch key={audio.id}>
-                                <a className="channel podcast">
-                                    <img src={audio.urls.image} alt={audio.title} />  
-                                    <h2>{audio.title}</h2>
-                                    <div className="meta">
-                                        { Math.ceil(audio.duration / 60) } minute
-                                    </div>
-                                </a>
-                            </Link>
-                        ))
-                    }
-                </div>
-
-
+                <Layout title={channel.title}>
+                    <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} >
+                        <div className="banner-content">
+                            <h1>{channel.title}</h1>  
+                        </div>  
+                    </div>
+                        
+                    <SeriesList series={series} />
+                    <PodcastList audioClips={audioClips} />
+                </Layout>
+                
 
                 <style jsx>
                 {`
-                    header {
-                    color: #fff;
-                    background: #8756ca;
-                    padding: 15px;
-                    text-align: center;
-                    }
+                    
                     .banner {
                     width: 100%;
                     padding-bottom: 25%;
@@ -95,7 +64,9 @@ export default class channel extends React.Component {
                     }
                     .banner-content h1{
                     margin: 0;
-                    color: black;
+                    color: white;
+                    background-color: black;
+                    padding: 10px;
                     position: absolute;
                     bottom: 0;
                     }
@@ -142,14 +113,6 @@ export default class channel extends React.Component {
                         font-size: 0.8em;
                       }
                 `} 
-                </style>
-                <style jsx global>
-                {`
-                    body {
-                    margin: 0;
-                    font-family: system-ui;
-                    }
-                `}
                 </style>
             </>
         );
