@@ -4,7 +4,7 @@ export default class PodcastList extends React.Component {
     state = {};
 
     render() {
-        const {audioClips} = this.props
+        const {audioClips,openPodcast} = this.props
         return (
             <>
                 
@@ -13,7 +13,7 @@ export default class PodcastList extends React.Component {
                     {
                         audioClips.map((audio) => (
                             <Link href={`/podcast?id=${audio.id}`} prefetch key={audio.id}>
-                                <a className="channel podcast">
+                                <a onClick={(e) =>openPodcast(e, audio)} className="channel podcast">
                                     <img src={audio.urls.image} alt={audio.title} />  
                                     <h2>{audio.title}</h2>
                                     <div className="meta">

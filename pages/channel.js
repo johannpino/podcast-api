@@ -3,9 +3,15 @@ import Layout from '../components/Layout'
 import PodcastList from '../components/PodcastList'
 import SeriesList from '../components/SeriesList'
 import Error from './_error';
+import PodcastPlayer from '../components/PodcastPlayer'
 
 
 export default class channel extends React.Component {
+    
+    state = {
+        openPodcast: null,
+    }
+    
     static async getInitialProps({query, res}){
         let idChannel = query.id
         try{
@@ -36,23 +42,44 @@ export default class channel extends React.Component {
 
     }
 
+    openPodcast = (e, podcast) => {
+        e.preventDefault()
+        console.log(podcast)
+        this.setState({
+            openPodcast: podcast,
+        })
+    }
+    onCloseModal = e => {
+        e.preventDefault()
+        this.setState({
+            openPodcast: null,
+        })
+    }
 
     render() {
         const {channel,audioClips, series, statusCode} = this.props
+        const {openPodcast} = this.state
+        // console.log(openPodcast)
+
             if(statusCode !== 200){
                 return <Error statusCode={statusCode} />
             }
         return (
             <>
-                <Layout title={channel.title}>
+                <Layout title={channel.title}> 
                     <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} >
                         <div className="banner-content">
                             <h1>{channel.title}</h1>  
                         </div>  
                     </div>
+                    {
+                        openPodcast && 
+                        <PodcastPlayer clip={openPodcast} 
+                        onCloseModal={this.onCloseModal} />
+                    }
                         
                     <SeriesList series={series} />
-                    <PodcastList audioClips={audioClips} />
+                    <PodcastList audioClips={audioClips} openPodcast={this.openPodcast} />
                 </Layout>
                 
 
