@@ -44,7 +44,7 @@ export default class channel extends React.Component {
 
     openPodcast = (e, podcast) => {
         e.preventDefault()
-        console.log(podcast)
+        // console.log(podcast)
         this.setState({
             openPodcast: podcast,
         })
